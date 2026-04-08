@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ovio — Engineered Cleaning</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <button class="modal-close" id="modal-close">✕</button>
+    <div class="modal-tag">Early Access</div>
+    <div class="modal-title">Be First In.</div>
+    <p class="modal-body">Ovio launches soon. Drop your email and we'll reach you before anyone else — including the details we're not ready to share yet.</p>
+    <div class="modal-form" id="modal-form">
+      <input type="email" class="modal-input" placeholder="your@email.com" id="modal-email" />
+      <button class="modal-submit" onclick="handleModal()">Notify Me</button>
+    </div>
+    <div class="modal-success" id="modal-success">
+      <div class="modal-success-icon">✓</div>
+      <p class="modal-success-text" style="max-width:none;">You're on the list. We'll be in touch.</p>
+    </div>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav id="nav">
+  <div class="nav-logo">Ovi<span>o</span></div>
+  <div class="nav-links">
+    <a href="#products">Products</a>
+    <a href="#science">Science</a>
+    <a href="#story">Story</a>
+  </div>
+  <button class="nav-cta" onclick="openModal()">Launching Soon</button>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-bg-text">OVIO</div>
+  <div class="hero-eyebrow">         </div>
+  <h1 class="hero-h1">Science That<br><em>Actually</em><br>Works</h1>
+  <p class="hero-sub">
+    "Forget what you know about cleaning. That was the old standard. Ovio is the new one."<br><br>
+    <strong>"Naya product hai... kaam karega kya? Ovio hai bhai."</strong>
+  </p>
+  <div class="hero-actions">
+    <button class="btn-primary" onclick="openModal()">Notify Me at Launch</button>
+    <a href="#products"><button class="btn-ghost">See Products ↓</button></a>
+  </div>
+  <div class="launch-badge">
+    <div class="launch-badge-dot"></div>
+    Two products. Launching Soon.
+  </div>
+  <div class="scroll-hint">
+    <div class="scroll-line"></div>
+    Scroll to explore
+  </div>
+</section>
+
+<!-- PRODUCTS -->
+<section class="products" id="products">
+  <div class="section-label">Coming Soon</div>
+  <h2>Two Products.<br><span class="accent">One Standard.</span></h2>
+  <p>We're not revealing everything yet. But we'll tell you this — each product is engineered specifically for the surfaces it touches. No Compromise.</p>
+
+  <div class="products-grid reveal">
+
+    <!-- FLOOR CARE -->
+    <div class="product-card">
+      <div class="product-card-bg">
+        <div class="product-card-icon">1</div>
+      </div>
+      <div class="product-tag">Product 1</div>
+      <div class="product-name">Floor<br><span>Care</span></div>
+      <p class="product-teaser">Engineered for India's floors — marble, tile, cement, wood. Maximum clean per mop, minimum residue. Details <span class="product-redact">CLASSIFIED</span> at launch.</p>
+      <div style="display:flex; gap:0.5rem; flex-wrap:wrap; margin-bottom:1.2rem;">
+        <span style="font-family:'DM Mono',monospace; font-size:0.58rem; letter-spacing:0.14em; text-transform:uppercase; border:1px solid var(--border); color:var(--acid); padding:0.3rem 0.7rem;">No Harsh Acids</span>
+        <span style="font-family:'DM Mono',monospace; font-size:0.58rem; letter-spacing:0.14em; text-transform:uppercase; border:1px solid var(--border); color:var(--acid); padding:0.3rem 0.7rem;">Disinfectant Formula</span>
+      </div>
+      <div style="margin-bottom:1.5rem;">
+        <div class="product-status">
+          <div class="status-locked">
+            <div class="lock-icon"></div>
+            Formula Undisclosed
+          </div>
+        </div>
+      </div>
+      <div class="notify-form">
+        <input type="email" class="notify-input" placeholder="Get notified" id="fc-email" />
+        <button class="notify-submit" onclick="handleNotify('fc-email', this)">→</button>
+      </div>
+    </div>
+
+    <!-- TOILET CARE -->
+    <div class="product-card">
+      <div class="product-card-bg">
+        <div class="product-card-icon">2</div>
+      </div>
+      <div class="product-tag">Product 2</div>
+      <div class="product-name">Toilet<br><span>Care</span></div>
+      <p class="product-teaser">Precision hygiene chemistry where it matters most. Controlled disinfection, no unnecessary claims. Ingredient details <span class="product-redact">CLASSIFIED</span> at launch.</p>
+      <div style="margin-bottom:1.5rem;">
+        <div class="product-status">
+          <div class="status-locked">
+            <div class="lock-icon"></div>
+            Formula Undisclosed
+          </div>
+        </div>
+      </div>
+      <div class="notify-form">
+        <input type="email" class="notify-input" placeholder="Get notified" id="tc-email" />
+        <button class="notify-submit" onclick="handleNotify('tc-email', this)">→</button>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- QUOTE -->
+<div class="quote-section reveal">
+  <div class="quote-text">
+    We don't avoid chemicals.<br>
+    We <span class="acid">engineer them better.</span>
+  </div>
+</div>
+
+<!-- PROBLEM -->
+<section id="story">
+  <div class="section-label">The Problem</div>
+  <h2>You're Cleaning <span class="accent">More.</span><br>Not Better.</h2>
+  <p>India cleans every day. But most cleaning products weren't engineered for Indian realities — they were imported ideas with local labels. The result is a market full of compromise.</p>
+  <div class="problem-grid reveal">
+    <div class="problem-card">
+      <div class="problem-num">1</div>
+      <div class="problem-title">Affordable ≠ Effective</div>
+      <p class="problem-desc">Budget cleaners use weak formulations. They move dirt around. They don't remove it. You clean again tomorrow.</p>
+    </div>
+    <div class="problem-card">
+      <div class="problem-num">2</div>
+      <div class="problem-title">Premium ≠ Worth It</div>
+      <p class="problem-desc">Premium brands charge for fragrance and packaging. You're paying for lavender, not performance.</p>
+    </div>
+    <div class="problem-card">
+      <div class="problem-num">3</div>
+      <div class="problem-title">Natural Claims ≠ Real Results</div>
+      <p class="problem-desc">"Herbal" and "eco" positioning is marketing. Chemistry is not the villain — it's the solution.</p>
+    </div>
+    <div class="problem-card">
+      <div class="problem-num">4</div>
+      <div class="problem-title">Clean Surfaces ≠ Functional Surfaces</div>
+      <p class="problem-desc">Most products stop at visible clean. Surfaces that resist odor and repel re-contamination — nobody was building that.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CHEMISTRY -->
+<section id="science" style="background: var(--dim);">
+  <div class="section-label">Applied Chemistry</div>
+  <h2>Formulated<br>with <span class="accent">Intent</span></h2>
+  <p>Every ingredient earns its place. No filler. No fragrance theater. Just functional chemical engineering designed to solve the specific problems of Indian homes.</p>
+  <div class="chem-list reveal">
+    <div class="chem-item">
+      <div class="chem-item-label">Formulation 1</div>
+      <div class="chem-item-title">Optimised Surfactant Systems</div>
+      <p class="chem-item-desc">Superior dirt and grease removal. Built to break bonds, not just lift surface grime.</p>
+    </div>
+    <div class="chem-item">
+      <div class="chem-item-label">Formulation 2</div>
+      <div class="chem-item-title">Controlled Disinfection</div>
+      <p class="chem-item-desc">Quaternary compounds used with precision — real hygiene, measured and delivered.</p>
+    </div>
+    <div class="chem-item">
+      <div class="chem-item-label">Formulation 3</div>
+      <div class="chem-item-title">Solvent Balancing</div>
+      <p class="chem-item-desc">Grease-cutting performance without stripping or residue. For oily kitchens and heavy footfall floors.</p>
+    </div>
+    <div class="chem-item">
+      <div class="chem-item-label">Formulation 4</div>
+      <div class="chem-item-title">Stability-First Composition</div>
+      <p class="chem-item-desc">Shelf life that doesn't degrade performance. What works on day one works on day ninety.</p>
+    </div>
+  </div>
+</section>
+
+<!-- INDIA -->
+<section>
+  <div class="section-label">Built for Real India</div>
+  <div class="india-split reveal">
+    <div>
+      <h2>Engineered for<br><span class="accent">This</span><br>Country</h2>
+      <p>Not adapted from an Imported formula. Not repackaged for Indian SKU sizes. Built from scratch — for high-dust environments, mixed surface types, heavy footfall, and households where performance matters but every rupee counts.</p>
+      <p><strong>Maximum output per rupee. That's not a tagline. It's the engineering brief.</strong></p>
+    </div>
+    <div>
+      <div class="stat-row"><div class="stat-num">3×</div><div class="stat-label">more dust in Indian urban homes vs. global average</div></div>
+      <div class="stat-row"><div class="stat-num">4+</div><div class="stat-label">surface types in a typical household — marble, tile, cement, wood</div></div>
+      <div class="stat-row"><div class="stat-num">0</div><div class="stat-label">compromise</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- MANIFESTO -->
+<div class="manifesto reveal" style="padding: 8rem 5vw; border-bottom: 1px solid var(--border);">
+  <div class="section-label">Design Philosophy</div>
+  <h2>Great Products<br>Don't Pretend.</h2>
+  <div class="manifesto-rules">
+    <div class="rule">
+      <div class="rule-num">01</div>
+      <div class="rule-title">No Greenwashing</div>
+      <p class="rule-desc">We won't call a surfactant "plant-derived" to make you feel better. If it works, we add it. If it doesn't, we don't use it.</p>
+    </div>
+    <div class="rule">
+      <div class="rule-num">02</div>
+      <div class="rule-title">No Unnecessary Claims</div>
+      <p class="rule-desc">We promise the formulation does what the formulation does — measurably.</p>
+    </div>
+    <div class="rule">
+      <div class="rule-num">03</div>
+      <div class="rule-title">No Compromise</div>
+      <p class="rule-desc">Accessible price does not mean accessible standards. Every batch, every SKU — same performance.</p>
+    </div>
+  </div>
+</div>
+
+<!-- VISION -->
+<section>
+  <div class="section-label">Our Vision</div>
+  <div class="vision-inner">
+    <h2>We Are Not<br>Building <span class="accent">Products.</span></h2>
+    <p>We're building a new category belief — that cleaning is not a commodity, it's engineering. The family mopping their floor at 6am deserves the same precision chemistry as any premium household anywhere in the world.</p>
+    <div style="margin-top: 2.5rem;">
+      <span class="vision-line active">Reliability over hype.</span>
+      <span class="vision-line">Function over fashion.</span>
+      <span class="vision-line">Chemistry over claims.</span>
+      <span class="vision-line">India's homes deserve better.</span>
+    </div>
+  </div>
+</section>
+
+<!-- LAUNCH CTA -->
+<div class="launch-section reveal">
+  <div class="launch-bg"><div class="launch-bg-word">SOON</div></div>
+  <div class="launch-inner">
+    <div class="section-label">Launching Soon</div>
+    <h2>Don't Miss<br><span class="accent">The Ovio Bhai.</span></h2>
+    <p>Two products. One standard. We're almost ready. Be on the list when we go live.</p>
+    <div class="launch-form">
+      <input type="email" class="launch-input" placeholder="Enter your email" id="launch-email" />
+      <button class="launch-btn" onclick="handleLaunch()">Notify Me at Launch</button>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Ovi<span>o</span></div>
+  <div class="footer-right">
+    <div class="footer-tagline">Engineered Cleaning. Real Performance.</div>
+    <div class="footer-links">
+      <a href="#home">Home</a>
+      <a href="#products">Products</a>
+      <a href="#science">Science</a>
+      <a href="#story">Story</a>
+    </div>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
