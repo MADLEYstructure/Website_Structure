@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ovio — Engineered Cleaning</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #0a0a0a;
+    --white: #f2f0ea;
+    --acid: #f5a623;
+    --dim: #161616;
+    --dim2: #1e1e1e;
+    --muted: #5a5a5a;
+    --border: #2a2a2a;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    line-height: 1.7;
+    overflow-x: hidden;
+    cursor: default;
+  }
+
+  /* GRAIN */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none; z-index: 9000; opacity: 0.35;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 8000;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.2rem 5vw;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.4s, background 0.4s;
+  }
+  nav.scrolled {
+    background: rgba(10,10,10,0.92);
+    backdrop-filter: blur(12px);
+    border-color: var(--border);
+  }
+  .nav-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.6rem;
+    letter-spacing: 0.12em;
+    color: var(--white);
+  }
+  .nav-logo span { color: var(--acid); }
+  .nav-links {
+    display: flex; gap: 2.5rem; align-items: center;
+  }
+  .nav-links a {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--white); }
+  .nav-cta {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    background: var(--acid);
+    color: var(--black);
+    border: none;
+    padding: 0.6rem 1.4rem;
+    cursor: pointer;
+    font-weight: 500;
+    transition: opacity 0.2s, transform 0.15s;
+  }
+  .nav-cta:hover { opacity: 0.88; transform: translateY(-1px); }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: flex; flex-direction: column; justify-content: flex-end;
+    padding: 0 5vw 5rem;
+    border-bottom: 1px solid var(--border);
+    position: relative; overflow: hidden;
+  }
+  .hero-bg-text {
+    position: absolute; top: 50%; left: -2vw;
+    transform: translateY(-50%);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(20vw, 26vw, 32vw);
+    line-height: 0.85; color: transparent;
+    -webkit-text-stroke: 1px #181818;
+    user-select: none; pointer-events: none;
+    white-space: nowrap;
+  }
+  .hero-eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem; letter-spacing: 0.22em;
+    text-transform: uppercase; color: var(--acid);
+    margin-bottom: 2rem;
+    opacity: 0; animation: fadeUp 0.8s ease 0.3s forwards;
+  }
+  .hero-h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(3rem, 8vw, 7.5rem);
+    line-height: 0.88; letter-spacing: -0.01em;
+    margin-top: 2rem;
+    opacity: 0; animation: fadeUp 0.9s ease 0.5s forwards;
+  }
+  .hero-h1 em { font-style: normal; color: var(--acid); }
+  .hero-sub {
+    margin-top: 2.5rem; max-width: 500px;
+    font-size: clamp(0.95rem, 1.3vw, 1.1rem);
+    color: #aaa; line-height: 1.8;
+    opacity: 0; animation: fadeUp 1s ease 0.7s forwards;
+  }
+  .hero-sub strong { color: var(--white); font-weight: 500; }
+  .hero-actions {
+    margin-top: 3rem; display: flex; gap: 1rem; align-items: center;
+    flex-wrap: wrap;
+    opacity: 0; animation: fadeUp 1s ease 0.9s forwards;
+  }
+  .btn-primary {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase;
+    background: var(--acid); color: var(--black);
+    border: none; padding: 1rem 2.2rem; cursor: pointer;
+    font-weight: 500; transition: opacity 0.2s, transform 0.15s;
+    position: relative; overflow: hidden;
+  }
+  .btn-primary::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: rgba(255,255,255,0.15);
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+  }
+  .btn-primary:hover::after { transform: translateX(0); }
+  .btn-primary:hover { transform: translateY(-2px); }
+
+  .btn-ghost {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase;
+    background: none; color: var(--muted);
+    border: 1px solid var(--border); padding: 1rem 2.2rem; cursor: pointer;
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .btn-ghost:hover { border-color: var(--white); color: var(--white); }
+
+  .launch-badge {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem; letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--acid); border: 1px solid rgba(245,166,35,0.3);
+    padding: 0.4rem 1rem;
+    opacity: 0; animation: fadeUp 1s ease 1.1s forwards;
+    margin-top: 2rem; width: fit-content;
+  }
+  .launch-badge-dot {
+    width: 6px; height: 6px;
+    background: var(--acid); border-radius: 50%;
+    animation: pulse 1.5s ease-in-out infinite;
+  }
+
+  .scroll-hint {
+    margin-top: 4rem; display: flex; align-items: center; gap: 1rem;
+    font-family: 'DM Mono', monospace; font-size: 0.66rem;
+    letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted);
+    opacity: 0; animation: fadeUp 1s ease 1.4s forwards;
+  }
+  .scroll-line { width: 50px; height: 1px; background: var(--border); position: relative; overflow: hidden; }
+  .scroll-line::after {
+    content: ''; position: absolute; top: 0; left: -100%;
+    width: 100%; height: 100%; background: var(--acid);
+    animation: slideLine 2s ease-in-out 2s infinite;
+  }
+
+  /* ── SECTION BASE ── */
+  section { padding: 8rem 5vw; border-bottom: 1px solid var(--border); }
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.66rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--acid); margin-bottom: 3rem;
+    display: flex; align-items: center; gap: 1rem;
+  }
+  .section-label::before { content: ''; width: 28px; height: 1px; background: var(--acid); }
+  h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2.8rem, 6vw, 5.5rem);
+    line-height: 0.92; letter-spacing: -0.01em; margin-bottom: 2rem;
+  }
+  h2 .accent { color: var(--acid); }
+  p { font-size: clamp(0.9rem, 1.15vw, 1.05rem); color: #aaa; max-width: 580px; margin-bottom: 1.4rem; }
+  p strong { color: var(--white); font-weight: 500; }
+
+  /* ── PRODUCTS SECTION ── */
+  .products { background: var(--dim); }
+  .products-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 1px;
+    background: var(--border); margin-top: 4rem;
+  }
+  .product-card {
+    background: var(--dim); padding: 3.5rem;
+    position: relative; overflow: hidden;
+    transition: background 0.4s;
+    min-height: 360px;
+    display: flex; flex-direction: column; justify-content: flex-end;
+  }
+  .product-card:hover { background: #1a1a1a; }
+  .product-card-bg {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    pointer-events: none;
+  }
+  .product-card-icon {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(10rem, 18vw, 16rem);
+    line-height: 1; color: transparent;
+    -webkit-text-stroke: 1px #252525;
+    letter-spacing: -0.05em;
+    transition: -webkit-text-stroke-color 0.4s;
+  }
+  .product-card:hover .product-card-icon { -webkit-text-stroke-color: #2e2e2e; }
+
+  .product-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--acid); margin-bottom: 1rem;
+    display: flex; align-items: center; gap: 0.6rem;
+  }
+  .product-tag::before { content: ''; width: 18px; height: 1px; background: var(--acid); }
+
+  .product-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2.5rem, 4vw, 4rem);
+    line-height: 0.9; color: var(--white); margin-bottom: 1rem;
+  }
+  .product-name span { color: var(--acid); }
+
+  .product-teaser {
+    font-size: 0.85rem; color: var(--muted);
+    max-width: 300px; line-height: 1.65; margin-bottom: 2rem;
+  }
+
+  .product-status {
+    display: flex; align-items: center; gap: 0.75rem;
+    font-family: 'DM Mono', monospace; font-size: 0.62rem;
+    letter-spacing: 0.15em; text-transform: uppercase;
+  }
+  .status-locked {
+    color: var(--muted); border: 1px solid var(--border);
+    padding: 0.45rem 1rem; display: flex; align-items: center; gap: 0.5rem;
+  }
+  .lock-icon {
+    width: 10px; height: 10px; border: 1.5px solid var(--muted);
+    border-radius: 1px; position: relative; flex-shrink: 0;
+  }
+  .lock-icon::after {
+    content: ''; position: absolute; top: -5px; left: 1px;
+    width: 6px; height: 5px; border: 1.5px solid var(--muted);
+    border-bottom: none; border-radius: 3px 3px 0 0;
+  }
+  .product-redact {
+    display: inline-block;
+    background: var(--border); color: transparent;
+    user-select: none; width: 120px; height: 12px;
+    position: relative; overflow: hidden;
+  }
+  .product-redact::after {
+    content: '';
+    position: absolute; top: 0; left: -100%; width: 60%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(245,166,35,0.08), transparent);
+    animation: shimmer 3s ease-in-out infinite;
+  }
+
+  /* notify form */
+  .notify-form {
+    display: flex; gap: 0; margin-top: 0.5rem; max-width: 340px;
+  }
+  .notify-input {
+    flex: 1; background: #111; border: 1px solid var(--border);
+    border-right: none; padding: 0.7rem 1rem;
+    font-family: 'DM Sans', sans-serif; font-size: 0.85rem;
+    color: var(--white); outline: none;
+    transition: border-color 0.2s;
+  }
+  .notify-input::placeholder { color: var(--muted); }
+  .notify-input:focus { border-color: var(--acid); }
+  .notify-submit {
+    background: var(--acid); color: var(--black); border: none;
+    padding: 0.7rem 1.2rem; cursor: pointer;
+    font-family: 'DM Mono', monospace; font-size: 0.62rem;
+    letter-spacing: 0.12em; text-transform: uppercase; font-weight: 500;
+    transition: opacity 0.2s;
+  }
+  .notify-submit:hover { opacity: 0.85; }
+
+  /* ── QUOTE BREAK ── */
+  .quote-section {
+    padding: 9rem 5vw; background: var(--dim2);
+    text-align: center;
+  }
+  .quote-text {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2rem, 5.5vw, 5rem);
+    line-height: 1.08; max-width: 900px; margin: 0 auto;
+    letter-spacing: 0.02em; color: var(--white);
+  }
+  .quote-text .acid { color: var(--acid); }
+
+  /* ── PROBLEM ── */
+  .problem-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 1px; background: var(--border); margin-top: 4rem;
+  }
+  .problem-card {
+    background: var(--black); padding: 2.5rem;
+    transition: background 0.3s;
+  }
+  .problem-card:hover { background: var(--dim2); }
+  .problem-num { font-family: 'Bebas Neue', sans-serif; font-size: 3.5rem; color: #1e1e1e; line-height: 1; margin-bottom: 0.4rem; }
+  .problem-title { font-size: 0.95rem; font-weight: 500; color: var(--white); margin-bottom: 0.6rem; }
+  .problem-desc { font-size: 0.82rem; color: #aaa; max-width: none; margin: 0; line-height: 1.6; }
+
+  /* ── CHEMISTRY ── */
+  .chem-list {
+    margin-top: 3.5rem;
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 2rem;
+  }
+  .chem-item { border-top: 1px solid var(--border); padding-top: 1.5rem; }
+  .chem-item-label { font-family: 'DM Mono', monospace; font-size: 0.62rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--acid); margin-bottom: 0.6rem; }
+  .chem-item-title { font-size: 0.95rem; font-weight: 500; color: var(--white); margin-bottom: 0.4rem; }
+  .chem-item-desc { font-size: 0.82rem; color: #aaa; max-width: none; margin: 0; line-height: 1.6; }
+
+  /* ── INDIA ── */
+  .india-split { display: grid; grid-template-columns: 1fr 1fr; gap: 6vw; align-items: start; margin-top: 2rem; }
+  .stat-row { display: flex; align-items: baseline; gap: 1rem; padding: 1.2rem 0; border-bottom: 1px solid var(--border); }
+  .stat-num { font-family: 'Bebas Neue', sans-serif; font-size: 2.6rem; color: var(--acid); line-height: 1; min-width: 4rem; }
+  .stat-label { font-size: 0.85rem; color: #aaa; }
+
+  /* ── MANIFESTO ── */
+  .manifesto { background: var(--acid); }
+  .manifesto h2 { color: var(--black); }
+  .manifesto p { color: rgba(0,0,0,0.65); }
+  .manifesto .section-label { color: rgba(0,0,0,0.55); }
+  .manifesto .section-label::before { background: rgba(0,0,0,0.55); }
+  .manifesto .rule-desc { color: var(--black); }
+  .manifesto-rules { margin-top: 3rem; display: grid; grid-template-columns: repeat(3,1fr); gap: 1px; background: rgba(0,0,0,0.15); }
+  .rule { background: var(--acid); padding: 2rem; }
+  .rule-num { font-family: 'Bebas Neue', sans-serif; font-size: 3rem; color: rgba(0,0,0,0.1); line-height: 1; margin-bottom: 0.4rem; }
+  .rule-title { font-size: 0.95rem; font-weight: 500; color: var(--black); margin-bottom: 0.4rem; }
+  .rule-desc { font-size: 0.82rem; color: rgba(0,0,0,0.75); max-width: none; margin: 0; line-height: 1.6; }
+
+  /* ── VISION ── */
+  .vision-inner { max-width: 720px; }
+  .vision-line {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(1.5rem, 3.5vw, 3rem); letter-spacing: 0.03em;
+    color: #2a2a2a; display: block; padding: 1.2rem 0;
+    border-bottom: 1px solid var(--border);
+    transition: color 0.3s; cursor: default;
+  }
+  .vision-line:hover { color: var(--white); }
+  .vision-line.active { color: var(--acid); }
+
+  /* ── LAUNCH CTA ── */
+  .launch-section {
+    padding: 10rem 5vw; text-align: center;
+    background: var(--dim); position: relative; overflow: hidden;
+  }
+  .launch-bg {
+    position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+    pointer-events: none;
+  }
+  .launch-bg-word {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(18vw, 24vw, 28vw);
+    color: transparent; -webkit-text-stroke: 1px #1a1a1a;
+    white-space: nowrap; user-select: none;
+  }
+  .launch-inner { position: relative; z-index: 1; }
+  .launch-inner .section-label { justify-content: center; }
+  .launch-inner .section-label::before { display: none; }
+  .launch-inner h2 { font-size: clamp(3rem, 7vw, 6.5rem); margin-bottom: 1.5rem; }
+  .launch-inner p { max-width: 480px; margin: 0 auto 3rem; color: #777; text-align: center; }
+  .launch-form {
+    display: flex; gap: 0; justify-content: center; max-width: 460px; margin: 0 auto;
+  }
+  .launch-input {
+    flex: 1; background: #111; border: 1px solid var(--border);
+    border-right: none; padding: 1rem 1.4rem;
+    font-family: 'DM Sans', sans-serif; font-size: 0.9rem;
+    color: var(--white); outline: none; transition: border-color 0.2s;
+  }
+  .launch-input::placeholder { color: var(--muted); }
+  .launch-input:focus { border-color: var(--acid); }
+  .launch-btn {
+    background: var(--acid); color: var(--black); border: none;
+    padding: 1rem 2rem; cursor: pointer;
+    font-family: 'DM Mono', monospace; font-size: 0.7rem;
+    letter-spacing: 0.15em; text-transform: uppercase; font-weight: 500;
+    transition: opacity 0.2s, transform 0.15s;
+    white-space: nowrap;
+  }
+  .launch-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+  .launch-note { font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); margin-top: 1.2rem; }
+
+  /* ── FOOTER ── */
+  footer {
+    padding: 3.5rem 5vw; display: flex;
+    justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 1.5rem;
+    border-top: 1px solid var(--border);
+  }
+  .footer-logo { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; letter-spacing: 0.08em; color: var(--white); }
+  .footer-logo span { color: var(--acid); }
+  .footer-right { display: flex; flex-direction: column; align-items: flex-end; gap: 0.4rem; }
+  .footer-tagline { font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); }
+  .footer-links { display: flex; gap: 1.5rem; }
+  .footer-links a { font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color 0.2s; }
+  .footer-links a:hover { color: var(--acid); }
+
+  /* ── MODAL ── */
+  .modal-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.85);
+    z-index: 9999; display: flex; align-items: center; justify-content: center;
+    opacity: 0; pointer-events: none; transition: opacity 0.3s;
+    backdrop-filter: blur(6px);
+  }
+  .modal-overlay.open { opacity: 1; pointer-events: all; }
+  .modal {
+    background: var(--dim); border: 1px solid var(--border);
+    padding: 3rem; max-width: 480px; width: 90%;
+    transform: translateY(20px); transition: transform 0.3s;
+    position: relative;
+  }
+  .modal-overlay.open .modal { transform: translateY(0); }
+  .modal-close {
+    position: absolute; top: 1.2rem; right: 1.2rem;
+    background: none; border: none; color: var(--muted); cursor: pointer;
+    font-size: 1.2rem; line-height: 1; transition: color 0.2s;
+  }
+  .modal-close:hover { color: var(--white); }
+  .modal-tag { font-family: 'DM Mono', monospace; font-size: 0.62rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--acid); margin-bottom: 1rem; }
+  .modal-title { font-family: 'Bebas Neue', sans-serif; font-size: 2.5rem; color: var(--white); margin-bottom: 0.8rem; }
+  .modal-body { font-size: 0.88rem; color: #888; line-height: 1.7; margin-bottom: 2rem; }
+  .modal-form { display: flex; gap: 0; }
+  .modal-input {
+    flex: 1; background: #111; border: 1px solid var(--border); border-right: none;
+    padding: 0.8rem 1rem; font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem; color: var(--white); outline: none; transition: border-color 0.2s;
+  }
+  .modal-input:focus { border-color: var(--acid); }
+  .modal-input::placeholder { color: var(--muted); }
+  .modal-submit {
+    background: var(--acid); color: var(--black); border: none;
+    padding: 0.8rem 1.4rem; cursor: pointer;
+    font-family: 'DM Mono', monospace; font-size: 0.62rem;
+    letter-spacing: 0.12em; text-transform: uppercase; font-weight: 500;
+  }
+  .modal-success { display: none; text-align: center; padding: 1rem 0; }
+  .modal-success-icon { font-family: 'Bebas Neue', sans-serif; font-size: 3rem; color: var(--acid); }
+  .modal-success-text { font-size: 0.9rem; color: #888; margin-top: 0.5rem; }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(28px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes slideLine {
+    0% { left: -100%; } 50% { left: 0%; } 100% { left: 100%; }
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.75); }
+  }
+  @keyframes shimmer {
+    0% { left: -60%; } 100% { left: 160%; }
+  }
+
+  .reveal { opacity: 0; transform: translateY(36px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  @media (max-width: 700px) {
+    .problem-grid, .products-grid, .india-split, .manifesto-rules { grid-template-columns: 1fr; }
+    .nav-links { display: none; }
+    .product-card { padding: 2rem; min-height: 280px; }
+    section { padding: 5rem 5vw; }
+    .hero { padding: 0 5vw 3rem; min-height: 90vh; }
+    .hero-h1 { font-size: clamp(3rem, 13vw, 5rem); }
+    .hero-sub { font-size: 0.95rem; }
+    .hero-actions { flex-direction: column; align-items: stretch; }
+    .hero-actions .btn-primary, .hero-actions .btn-ghost { text-align: center; width: 100%; }
+    h2 { font-size: clamp(2.2rem, 9vw, 3.5rem); }
+    .quote-section { padding: 5rem 5vw; }
+    .quote-text { font-size: clamp(1.6rem, 7vw, 3rem); }
+    .india-split { gap: 3rem; }
+    .stat-num { font-size: 2rem; }
+    .launch-section { padding: 6rem 5vw; }
+    .launch-inner h2 { font-size: clamp(2.5rem, 10vw, 4rem); }
+    .launch-form { flex-direction: column; }
+    .launch-input { border-right: 1px solid var(--border); border-bottom: none; }
+    .launch-btn { width: 100%; padding: 1rem; }
+    .notify-form { flex-direction: column; }
+    .notify-input { border-right: 1px solid var(--border); border-bottom: none; }
+    .notify-submit { width: 100%; padding: 0.8rem; }
+    .modal { padding: 2rem; width: 95%; }
+    .modal-form { flex-direction: column; }
+    .modal-input { border-right: 1px solid var(--border); border-bottom: none; }
+    .modal-submit { width: 100%; padding: 0.8rem; }
+    footer { flex-direction: column; align-items: flex-start; gap: 1.5rem; }
+    .footer-right { align-items: flex-start; }
+    .chem-list { grid-template-columns: 1fr; }
+    .product-card-icon { font-size: clamp(8rem, 30vw, 12rem); }
+  }
+</style>
+</head>
+<body>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <button class="modal-close" id="modal-close">✕</button>
+    <div class="modal-tag">Early Access</div>
+    <div class="modal-title">Be First In.</div>
+    <p class="modal-body">Ovio launches soon. Drop your email and we'll reach you before anyone else — including the details we're not ready to share yet.</p>
+    <div class="modal-form" id="modal-form">
+      <input type="email" class="modal-input" placeholder="your@email.com" id="modal-email" />
+      <button class="modal-submit" onclick="handleModal()">Notify Me</button>
+    </div>
+    <div class="modal-success" id="modal-success">
+      <div class="modal-success-icon">✓</div>
+      <p class="modal-success-text" style="max-width:none;">You're on the list. We'll be in touch.</p>
+    </div>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav id="nav">
+  <div class="nav-logo">Ovi<span>o</span></div>
+  <div class="nav-links">
+    <a href="#products">Products</a>
+    <a href="#science">Science</a>
+    <a href="#story">Story</a>
+  </div>
+  <button class="nav-cta" onclick="openModal()">Launching Soon</button>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-bg-text">OVIO</div>
+  <div class="hero-eyebrow">Ovio — Engineered Cleaning</div>
+  <h1 class="hero-h1">Science That<br><em>Actually</em><br>Works</h1>
+  <p class="hero-sub">
+    "Forget what you know about cleaning. That was the old standard. Ovio is the new one."<br><br>
+    <strong>"Naya product hai... kaam karega kya? Ovio hai bhai."</strong>
+  </p>
+  <div class="hero-actions">
+    <button class="btn-primary" onclick="openModal()">Notify Me at Launch</button>
+    <a href="#products"><button class="btn-ghost">See Products ↓</button></a>
+  </div>
+  <div class="launch-badge">
+    <div class="launch-badge-dot"></div>
+    Two products. Launching Soon.
+  </div>
+  <div class="scroll-hint">
+    <div class="scroll-line"></div>
+    Scroll to explore
+  </div>
+</section>
+
+<!-- PRODUCTS -->
+<section class="products" id="products">
+  <div class="section-label">Coming Soon</div>
+  <h2>Two Products.<br><span class="accent">One Standard.</span></h2>
+  <p>We're not revealing everything yet. But we'll tell you this — each product is engineered specifically for the surfaces it touches. No Compromise.</p>
+
+  <div class="products-grid reveal">
+
+    <!-- FLOOR CARE -->
+    <div class="product-card">
+      <div class="product-card-bg">
+        <div class="product-card-icon">01</div>
+      </div>
+      <div class="product-tag">Product 01</div>
+      <div class="product-name">Floor<br><span>Care</span></div>
+      <p class="product-teaser">Engineered for India's floors — marble, tile, cement, wood. Maximum clean per mop, minimum residue. Details <span class="product-redact">CLASSIFIED</span> at launch.</p>
+      <div style="display:flex; gap:0.5rem; flex-wrap:wrap; margin-bottom:1.2rem;">
+        <span style="font-family:'DM Mono',monospace; font-size:0.58rem; letter-spacing:0.14em; text-transform:uppercase; border:1px solid var(--border); color:var(--acid); padding:0.3rem 0.7rem;">No Harsh Acids</span>
+        <span style="font-family:'DM Mono',monospace; font-size:0.58rem; letter-spacing:0.14em; text-transform:uppercase; border:1px solid var(--border); color:var(--acid); padding:0.3rem 0.7rem;">Disinfectant Formula</span>
+      </div>
+      <div style="margin-bottom:1.5rem;">
+        <div class="product-status">
+          <div class="status-locked">
+            <div class="lock-icon"></div>
+            Formula Undisclosed
+          </div>
+        </div>
+      </div>
+      <div class="notify-form">
+        <input type="email" class="notify-input" placeholder="Get notified" id="fc-email" />
+        <button class="notify-submit" onclick="handleNotify('fc-email', this)">→</button>
+      </div>
+    </div>
+
+    <!-- TOILET CARE -->
+    <div class="product-card">
+      <div class="product-card-bg">
+        <div class="product-card-icon">02</div>
+      </div>
+      <div class="product-tag">Product 02</div>
+      <div class="product-name">Toilet<br><span>Care</span></div>
+      <p class="product-teaser">Precision hygiene chemistry where it matters most. Controlled disinfection, no unnecessary claims. Ingredient details <span class="product-redact">CLASSIFIED</span> at launch.</p>
+      <div style="margin-bottom:1.5rem;">
+        <div class="product-status">
+          <div class="status-locked">
+            <div class="lock-icon"></div>
+            Formula Undisclosed
+          </div>
+        </div>
+      </div>
+      <div class="notify-form">
+        <input type="email" class="notify-input" placeholder="Get notified" id="tc-email" />
+        <button class="notify-submit" onclick="handleNotify('tc-email', this)">→</button>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- QUOTE -->
+<div class="quote-section reveal">
+  <div class="quote-text">
+    We don't avoid chemicals.<br>
+    We <span class="acid">engineer them better.</span>
+  </div>
+</div>
+
+<!-- PROBLEM -->
+<section id="story">
+  <div class="section-label">The Problem</div>
+  <h2>You're Cleaning <span class="accent">More.</span><br>Not Better.</h2>
+  <p>India cleans every day. But most cleaning products weren't engineered for Indian realities — they were imported ideas with local labels. The result is a market full of compromise.</p>
+  <div class="problem-grid reveal">
+    <div class="problem-card">
+      <div class="problem-num">01</div>
+      <div class="problem-title">Affordable ≠ Effective</div>
+      <p class="problem-desc">Budget cleaners use weak formulations. They move dirt around. They don't remove it. You clean again tomorrow.</p>
+    </div>
+    <div class="problem-card">
+      <div class="problem-num">02</div>
+      <div class="problem-title">Premium ≠ Worth It</div>
+      <p class="problem-desc">Premium brands charge for fragrance and packaging. You're paying for lavender, not performance.</p>
+    </div>
+    <div class="problem-card">
+      <div class="problem-num">03</div>
+      <div class="problem-title">Natural Claims ≠ Real Results</div>
+      <p class="problem-desc">"Herbal" and "eco" positioning is marketing. Chemistry is not the villain — it's the solution.</p>
+    </div>
+    <div class="problem-card">
+      <div class="problem-num">04</div>
+      <div class="problem-title">Clean Surfaces ≠ Functional Surfaces</div>
+      <p class="problem-desc">Most products stop at visible clean. Surfaces that resist odor and repel re-contamination — nobody was building that.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CHEMISTRY -->
+<section id="science" style="background: var(--dim);">
+  <div class="section-label">Applied Chemistry</div>
+  <h2>Formulated<br>with <span class="accent">Intent</span></h2>
+  <p>Every ingredient earns its place. No filler. No fragrance theater. Just functional chemical engineering designed to solve the specific problems of Indian homes.</p>
+  <div class="chem-list reveal">
+    <div class="chem-item">
+      <div class="chem-item-label">Formulation 01</div>
+      <div class="chem-item-title">Optimised Surfactant Systems</div>
+      <p class="chem-item-desc">Superior dirt and grease removal. Built to break bonds, not just lift surface grime.</p>
+    </div>
+    <div class="chem-item">
+      <div class="chem-item-label">Formulation 02</div>
+      <div class="chem-item-title">Controlled Disinfection</div>
+      <p class="chem-item-desc">Quaternary compounds used with precision — real hygiene, measured and delivered.</p>
+    </div>
+    <div class="chem-item">
+      <div class="chem-item-label">Formulation 03</div>
+      <div class="chem-item-title">Solvent Balancing</div>
+      <p class="chem-item-desc">Grease-cutting performance without stripping or residue. For oily kitchens and heavy footfall floors.</p>
+    </div>
+    <div class="chem-item">
+      <div class="chem-item-label">Formulation 04</div>
+      <div class="chem-item-title">Stability-First Composition</div>
+      <p class="chem-item-desc">Shelf life that doesn't degrade performance. What works on day one works on day ninety.</p>
+    </div>
+  </div>
+</section>
+
+<!-- INDIA -->
+<section>
+  <div class="section-label">Built for Real India</div>
+  <div class="india-split reveal">
+    <div>
+      <h2>Engineered for<br><span class="accent">This</span><br>Country</h2>
+      <p>Not adapted from an Imported formula. Not repackaged for Indian SKU sizes. Built from scratch — for high-dust environments, mixed surface types, heavy footfall, and households where performance matters but every rupee counts.</p>
+      <p><strong>Maximum output per rupee. That's not a tagline. It's the engineering brief.</strong></p>
+    </div>
+    <div>
+      <div class="stat-row"><div class="stat-num">3×</div><div class="stat-label">more dust in Indian urban homes vs. global average</div></div>
+      <div class="stat-row"><div class="stat-num">4+</div><div class="stat-label">surface types in a typical household — marble, tile, cement, wood</div></div>
+      <div class="stat-row"><div class="stat-num">0</div><div class="stat-label">compromise</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- MANIFESTO -->
+<div class="manifesto reveal" style="padding: 8rem 5vw; border-bottom: 1px solid var(--border);">
+  <div class="section-label">Design Philosophy</div>
+  <h2>Great Products<br>Don't Pretend.</h2>
+  <div class="manifesto-rules">
+    <div class="rule">
+      <div class="rule-num">01</div>
+      <div class="rule-title">No Greenwashing</div>
+      <p class="rule-desc">We won't call a surfactant "plant-derived" to make you feel better. If it works, we add it. If it doesn't, we don't use it.</p>
+    </div>
+    <div class="rule">
+      <div class="rule-num">02</div>
+      <div class="rule-title">No Unnecessary Claims</div>
+      <p class="rule-desc">We promise the formulation does what the formulation does — measurably.</p>
+    </div>
+    <div class="rule">
+      <div class="rule-num">03</div>
+      <div class="rule-title">No Compromise</div>
+      <p class="rule-desc">Accessible price does not mean accessible standards. Every batch, every SKU — same performance.</p>
+    </div>
+  </div>
+</div>
+
+<!-- VISION -->
+<section>
+  <div class="section-label">Our Vision</div>
+  <div class="vision-inner">
+    <h2>We Are Not<br>Building <span class="accent">Products.</span></h2>
+    <p>We're building a new category belief — that cleaning is not a commodity, it's engineering. The family mopping their floor at 6am deserves the same precision chemistry as any premium household anywhere in the world.</p>
+    <div style="margin-top: 2.5rem;">
+      <span class="vision-line active">Reliability over hype.</span>
+      <span class="vision-line">Function over fashion.</span>
+      <span class="vision-line">Chemistry over claims.</span>
+      <span class="vision-line">India's homes deserve better.</span>
+    </div>
+  </div>
+</section>
+
+<!-- LAUNCH CTA -->
+<div class="launch-section reveal">
+  <div class="launch-bg"><div class="launch-bg-word">SOON</div></div>
+  <div class="launch-inner">
+    <div class="section-label">Launching Soon</div>
+    <h2>Don't Miss<br><span class="accent">The Ovio Bhai.</span></h2>
+    <p>Two products. One standard. We're almost ready. Be on the list when we go live.</p>
+    <div class="launch-form">
+      <input type="email" class="launch-input" placeholder="Enter your email" id="launch-email" />
+      <button class="launch-btn" onclick="handleLaunch()">Notify Me at Launch</button>
+    </div>
+    <p class="launch-note">No spam. Just one email when we're live.</p>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Ovi<span>o</span></div>
+  <div class="footer-right">
+    <div class="footer-tagline">Engineered Cleaning. Real Performance.</div>
+    <div class="footer-links">
+      <a href="#home">Home</a>
+      <a href="#products">Products</a>
+      <a href="#science">Science</a>
+      <a href="#story">Story</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Nav scroll
+  const navEl = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    navEl.classList.toggle('scrolled', window.scrollY > 60);
+  });
+
+  // Reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+  }, { threshold: 0.08 });
+  reveals.forEach(r => obs.observe(r));
+
+  // Vision cycle
+  const vlines = document.querySelectorAll('.vision-line');
+  let vc = 0;
+  setInterval(() => {
+    vlines[vc].classList.remove('active');
+    vc = (vc + 1) % vlines.length;
+    vlines[vc].classList.add('active');
+  }, 2000);
+
+  // Modal
+  function openModal() {
+    document.getElementById('modal').classList.add('open');
+  }
+  document.getElementById('modal-close').addEventListener('click', () => {
+    document.getElementById('modal').classList.remove('open');
+  });
+  document.getElementById('modal').addEventListener('click', function(e) {
+    if (e.target === this) this.classList.remove('open');
+  });
+
+  function handleModal() {
+    const email = document.getElementById('modal-email').value;
+    if (!email || !email.includes('@')) return;
+    document.getElementById('modal-form').style.display = 'none';
+    document.getElementById('modal-success').style.display = 'block';
+  }
+
+  function handleNotify(inputId, btn) {
+    const input = document.getElementById(inputId);
+    if (!input.value || !input.value.includes('@')) return;
+    btn.textContent = '✓';
+    btn.style.background = '#d4901a';
+    input.value = '';
+    input.placeholder = "You're on the list";
+    input.disabled = true;
+    btn.disabled = true;
+  }
+
+  function handleLaunch() {
+    const input = document.getElementById('launch-email');
+    if (!input.value || !input.value.includes('@')) return;
+    const btn = input.nextElementSibling;
+    btn.textContent = "You're On The List ✓";
+    btn.style.opacity = '0.7';
+    input.value = '';
+    input.placeholder = "We'll be in touch";
+    input.disabled = true;
+    btn.disabled = true;
+  }
+</script>
+</body>
+</html>
