@@ -1,0 +1,30 @@
+functionsDirectory = "C:\\Users\\Sayan Dey\\OneDrive\\Desktop\\Ovio\\netlify\\functions"
+functionsDirectoryOrigin = "ui"
+plugins = []
+headers = []
+redirects = []
+
+[functions]
+
+[functions."*"]
+
+[build]
+publish = "C:\\Users\\Sayan Dey\\OneDrive\\Desktop\\Ovio"
+publishOrigin = "ui"
+commandOrigin = "ui"
+command = "# no build command"
+functions = "C:\\Users\\Sayan Dey\\OneDrive\\Desktop\\Ovio\\netlify\\functions"
+
+[build.environment]
+
+[build.processing]
+
+[build.processing.css]
+
+[build.processing.html]
+
+[build.processing.images]
+
+[build.processing.js]
+
+[build.services]
