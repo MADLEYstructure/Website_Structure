@@ -1,0 +1,27 @@
+{
+  "name": "ovio",
+  "version": "1.0.0",
+  "description": "It is a Cleaning Brand",
+  "homepage": "https://github.com/MADLEYstructure/Website_Structure#readme",
+  "bugs": {
+    "url": "https://github.com/MADLEYstructure/Website_Structure/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MADLEYstructure/Website_Structure.git"
+  },
+  "license": "ISC",
+  "author": "MADLEY Chemicals",
+  "type": "module",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "axios": "^1.15.1",
+    "express": "^5.2.1",
+    "express-rate-limit": "^8.5.1",
+    "mongoose": "^9.4.1",
+    "nodemon": "^3.1.14"
+  }
+}
